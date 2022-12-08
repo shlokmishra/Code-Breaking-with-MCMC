@@ -1,4 +1,4 @@
-plaintext <- "this is sample text one two three four five six seven"
+plaintext <- "hello there a the what is your name is it very good too much beautiful this show is really nice"
 # Generate a new cipher by permuting the letters of the alphabet
 generate_cipher <- function() sample(letters,
                                      replace = FALSE)
@@ -60,14 +60,16 @@ break_into_two_chars <- function(text){
                            from = starting_indices,
                            to = ending_indices))
 }
-war_and_peace <- readr::read_file("https://www.gutenberg.org/cache/epub/2600/pg2600.txt")
-war_and_peace <-
-  war_and_peace |>
-  stringr::str_to_lower() |>
-  gsub(pattern = "[^A-Za-z ]+", replacement = "", x=_) |>
-  stringi::stri_trans_general(id = "Latin-ASCII")
-war_and_peace_2_characters <- break_into_two_chars(war_and_peace)
+# war_and_peace <- readr::read_file("https://www.gutenberg.org/cache/epub/2600/pg2600.txt")
+# war_and_peace <-
+#   war_and_peace |>
+#   stringr::str_to_lower() |>
+#   gsub(pattern = "[^A-Za-z ]+", replacement = "", x=_) |>
+#   stringi::stri_trans_general(id = "Latin-ASCII")
+# war_and_peace_2_characters <- break_into_two_chars(war_and_peace)
 # Ten most common two-character combinations
+
+load("War and Peace 2 characters.Rdata")
 probability_table <-
   table(war_and_peace_2_characters) / length(war_and_peace_2_characters)
 
@@ -98,4 +100,4 @@ for (iter in 1:50000) {
     i <- i + 1
   }
 }
-
+# save(war_and_peace_2_characters, file = "War and Peace 2 characters.Rdata")
