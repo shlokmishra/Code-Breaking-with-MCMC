@@ -69,7 +69,7 @@ break_into_two_chars <- function(text){
 # war_and_peace_2_characters <- break_into_two_chars(war_and_peace)
 # Ten most common two-character combinations
 
-load("War and Peace 2 characters.Rdata")
+load("war_and_peace_2_characters.Rdata")
 probability_table <-
   table(war_and_peace_2_characters) / length(war_and_peace_2_characters)
 
