@@ -1,3 +1,5 @@
+library(purrr)
+
 encrypt_decrypt_using_metropolis <- function(plaintext){
   
   #plaintext <- "this is a sample peice of text and i am really glad that this code can easily crack it"
@@ -41,10 +43,10 @@ encrypt_decrypt_using_metropolis <- function(plaintext){
     return(x)
   }
   get_log_lik_text <- function(text){
-    text |>
-      break_into_two_chars() |>
-      purrr::map_dbl(get_prob_two_char) |>
-      log() |>
+    text %>%
+      break_into_two_chars() %>%
+      purrr::map_dbl(get_prob_two_char) %>%
+      log() %>%
       sum()
   }
   get_prob_two_char <- function(two_char){
