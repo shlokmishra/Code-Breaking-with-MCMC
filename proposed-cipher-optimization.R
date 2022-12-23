@@ -39,9 +39,10 @@ if(split_text[[1]][1] != " "  && split_text[[1]][2] == " "){
       current_cipher <- generate_cipher()
       check(current_cipher)
       return()
-    }
-    else
-  }
+    } else {
+        return()
+      }
+  } 
   
   
 }
