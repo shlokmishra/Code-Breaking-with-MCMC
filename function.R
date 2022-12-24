@@ -1,6 +1,6 @@
 library(purrr)
 
-encrypt_decrypt_using_metropolis <- function(plaintext){
+encrypt_decrypt_using_metropolis <- function(plaintext, n){
   
   #plaintext <- "this is a sample peice of text and i am really glad that this code can easily crack it"
   
@@ -85,6 +85,9 @@ encrypt_decrypt_using_metropolis <- function(plaintext){
   current_log_lik <- get_log_lik_text(decoded_text_current)
   max_score <- current_log_lik
   best_cipher <- current_cipher
+  
+  similar <- numeric(length = n)
+  similar[1] <- current_log_lik
   for (iter in 2:n) {
     
     proposed_cipher <- swap(current_cipher)
@@ -106,9 +109,13 @@ encrypt_decrypt_using_metropolis <- function(plaintext){
     
     if (accept) {
       current_cipher <- proposed_cipher
-      print(glue::glue("Iteration {i}: {decoded_text_proposed}"))
+      current_log_lik <- proposed_log_lik
+      # print(glue::glue("Iteration {i}: {decoded_text_proposed}"))
       i <- i + 1
     }
+    
+    similar[iter] <- current_log_lik
+    
     if(current_log_lik > max_score){
       max_score <- current_log_lik
       best_cipher <- current_cipher
@@ -116,9 +123,12 @@ encrypt_decrypt_using_metropolis <- function(plaintext){
   }
   decoded_text_best <- decode_text(ciphered_text,
                                    cipher = current_cipher)
-  return(decoded_text_best)
+  print(i/n)
+  
+  return(list(decoded_text_best, similar))
   # save(war_and_peace_2_characters, file = "war_and_peace_2_characters.Rdata")
   
 }
+
 
 

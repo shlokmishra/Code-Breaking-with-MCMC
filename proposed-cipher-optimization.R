@@ -49,7 +49,7 @@ if(split_text[[1]][1] != " "  && split_text[[1]][2] == " "){
 paste(letters, collapse = "")
 
 for(i in 2:(len-1)){
-  if(split_text[[1]][i] != " "  && split_text[[1]][i+1] == " " ) && split_text[[1]][i-1] == " "){
+  if((split_text[[1]][i] != " "  && split_text[[1]][i+1] == " " ) && split_text[[1]][i-1] == " "){
     
   }
 }
