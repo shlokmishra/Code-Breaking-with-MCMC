@@ -1,23 +1,23 @@
 library(purrr)
 
-encrypt_decrypt_using_metropolis <- function(plaintext, n){
+encrypt_decrypt_using_metropolis <- function(ciphered_text, n){
   
   #plaintext <- "this is a sample peice of text and i am really glad that this code can easily crack it"
   
   # Generate a new cipher by permuting the letters of the alphabet
-  generate_cipher <- function() sample(letters,
-                                       replace = FALSE)
-  
-  # Encode a text using a cipher
-  encode_text <- function(text, cipher) {
-    chartr(
-      x = text,
-      old = paste(letters, collapse = ""),
-      new = paste(cipher, collapse = "")
-    )
-  }
-  
-  # Decode a text given a cipher
+  # generate_cipher <- function() sample(letters,
+  #                                      replace = FALSE)
+  # 
+  # # Encode a text using a cipher
+  # encode_text <- function(text, cipher) {
+  #   chartr(
+  #     x = text,
+  #     old = paste(letters, collapse = ""),
+  #     new = paste(cipher, collapse = "")
+  #   )
+  # }
+  # 
+  # # Decode a text given a cipher
   decode_text <- function(ciphered_text, cipher) {
     chartr(
       x = ciphered_text,
@@ -25,9 +25,7 @@ encrypt_decrypt_using_metropolis <- function(plaintext, n){
       new = paste(letters, collapse = "")
     )
   }
-  true_cipher <- generate_cipher()
-  ciphered_text <- encode_text(text = plaintext,
-                               cipher = true_cipher)
+  
   
   current_cipher <- generate_cipher()
   

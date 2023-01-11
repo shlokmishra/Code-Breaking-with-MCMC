@@ -25,6 +25,13 @@ swap <- function(x){
   return(x)
 }
 
+check <- function(cipher){
+  if(!(current_cipher[1] == split_text[[1]][1] || current_cipher[9] == split_text[[1]][1])) {
+    current_cipher <- generate_cipher()
+    return(current_cipher)
+  } 
+}
+
 decode_this <- encode_text(giventext, generate_cipher())
 split_text <- strsplit(decode_this, "")
 len <- length(split_text[[1]])
@@ -34,15 +41,7 @@ if(split_text[[1]][1] != " "  && split_text[[1]][2] == " "){
   # which("w" == letters)
   # letters[26]
   num <- which(split_text[[1]][1] == letters)
-  check <- function(cipher){
-    if(!(current_cipher[1] == split_text[[1]][1] || current_cipher[9] == split_text[[1]][1])) {
-      current_cipher <- generate_cipher()
-      check(current_cipher)
-      return()
-    } else {
-        return()
-      }
-  } 
+   
   
   
 }
