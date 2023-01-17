@@ -1,7 +1,6 @@
 giventext <- "a this is a sample peice of text and i am really glad that this code can easily crack it"
 
 
-
 generate_cipher <- function() sample(letters,
                                      replace = FALSE)
 
