@@ -29,7 +29,7 @@ new_sampling_way <- function(given_cipher){
     } 
   }
   all_scores <- as.numeric(all_possible_proposals[,27])
-  prob <- all_scores/sum(all_scores)
+  prob <- exp(all_scores)/sum(exp(all_scores))
   
   new_proposal <- sample(1:326, size = 1, prob, replace = TRUE)
   proposed_cipher <- all_possible_proposals[new_proposal, 1:26]

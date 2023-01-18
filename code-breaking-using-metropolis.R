@@ -1,7 +1,7 @@
 source("function.R")
 
 # Choose a value of n which will be the number of iterations
-n <- 5000
+n <- 500
 
 
 # Choose the string which you would like to encrypt and then decrypt using metropolis algorithm
@@ -16,8 +16,10 @@ ciphered_text <- encode_text(text = plaintext,
 
 
 decoded_text_best <- encrypt_decrypt_using_metropolis(ciphered_text, n)
+decoded_text_bestReg <- reg_metropolis(ciphered_text, n)
 paste("The best decoded text reached in" , n , "iterations is: '")
 decoded_text_best[[1]]
-plot.ts(decoded_text_best[[2]])
+plot.ts(decoded_text_best[[2]], ylim = range(c(decoded_text_best[[2]], get_log_lik_text(plaintext))))
+lines(decoded_text_bestReg[[2]], col = "blue")
 abline(h=get_log_lik_text(plaintext), col = "red")
 
