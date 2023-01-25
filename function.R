@@ -78,16 +78,16 @@ new_sampling_wayModified <- function(given_cipher){
   iter = 1
   
   for(iter in 1:326){
-    all_possible_proposals[iter, 1] -> i 
-    all_possible_proposals[iter, 2] -> j
+    i <- all_possible_proposals[iter, 1]
+    j <- all_possible_proposals[iter, 2]
     temp_cipher <- swap_given_indicies(given_cipher,i,j)
     all_possible_proposals[iter, 3] <- get_log_lik_text(decode_text(ciphered_text, temp_cipher))
   }
   
   
   # all_scores <- as.numeric(all_possible_proposals[,3])
-  prob <- exp(all_possible_proposals[,3])/sum(exp(all_possible_proposals[,3]))
-  new_proposal <- sample(1:326, size = 1, prob, replace = TRUE)
+  prob <- exp(all_possible_proposals[-1,3])/sum(exp(all_possible_proposals[-1,3]))
+  new_proposal <- sample(2:326, size = 1, prob, replace = TRUE)
   indicies_to_swap <- all_possible_proposals[new_proposal, 1:2]
   proposed_cipher <- swap_given_indicies(given_cipher, indicies_to_swap[1], indicies_to_swap[2])
   
@@ -99,10 +99,10 @@ new_sampling_wayModified <- function(given_cipher){
     all_possible_proposals_of_proposal[iter, 1] -> i 
     all_possible_proposals_of_proposal[iter, 2] -> j
     temp_cipher <- swap_given_indicies(proposed_cipher,i,j)
-    all_possible_proposals[iter, 3] <- get_log_lik_text(decode_text(ciphered_text, temp_cipher))
+    all_possible_proposals_of_proposal[iter, 3] <- get_log_lik_text(decode_text(ciphered_text, temp_cipher))
   }
   # all_scores_new <- as.numeric(all_possible_proposals_of_proposal[,3])
-  q1 <- (all_possible_proposals[1,3])/sum(exp(all_possible_proposals_of_proposal[,3]))
+  q1 <- exp(all_possible_proposals_of_proposal[1,3])/sum(exp(all_possible_proposals_of_proposal[,3]))
   q2 <- exp(all_possible_proposals[new_proposal, 3])/ sum(exp(all_possible_proposals[,3]))
   # exp(all_possible_proposals[new_proposal, 3])
   return(list((proposed_cipher), c(q1, q2)))
@@ -196,7 +196,7 @@ decrypt_metrop <- function(ciphered_text, n){
     
   }
   decoded_text_best <- decode_text(ciphered_text,
-                                   cipher = current_cipher)
+                                   cipher = best_cipher)
   
   print(i/n)
   
@@ -258,7 +258,7 @@ decrypt_metropReg <- function(ciphered_text, n){
     
   }
   decoded_text_best <- decode_text(ciphered_text,
-                                   cipher = current_cipher)
+                                   cipher = best_cipher)
   
   print(i/n)
   
@@ -282,10 +282,12 @@ decrypt_metropModified <- function(ciphered_text, n){
   similar[1] <- current_log_lik
   for (iter in 2:n) {
     
-    proposed_cipher <- new_sampling_wayModified(current_cipher)[[1]]
-    # c(q1,q2) <- new_sampling_wayModified(current_cipher)[[2]]
-    new_sampling_wayModified(current_cipher)[[2]][1] -> q1
-    new_sampling_wayModified(current_cipher)[[2]][2] -> q2
+    foo <- new_sampling_wayModified(current_cipher)
+    proposed_cipher <- foo[[1]]
+
+    (q1 <- foo[[2]][1])
+    (q2 <- foo[[2]][2])
+
     decoded_text_proposed <- decode_text(ciphered_text,
                                          cipher = proposed_cipher)
     decoded_text_current <- decode_text(ciphered_text,
@@ -294,12 +296,8 @@ decrypt_metropModified <- function(ciphered_text, n){
     proposed_log_lik <- get_log_lik_text(decoded_text_proposed)
     current_log_lik <- get_log_lik_text(decoded_text_current)
     
-    if(q2 != 0){
-      acceptance_probability <- min(1, (exp(proposed_log_lik - current_log_lik))*q1/q2)
-    }
-    else if(q2 == 0){
-      acceptance_probability <- 1
-    }
+  
+    acceptance_probability <- min(1,(exp(proposed_log_lik - current_log_lik))*q1/q2)
     
     
     accept <- sample(c(TRUE, FALSE),
@@ -327,7 +325,7 @@ decrypt_metropModified <- function(ciphered_text, n){
     
   }
   decoded_text_best <- decode_text(ciphered_text,
-                                   cipher = current_cipher)
+                                   cipher = best_cipher)
   
   print(i/n)
   
