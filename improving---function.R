@@ -53,4 +53,37 @@ new_sampling_wayModified <- function(given_cipher){
 }
 
 
+result <- c()  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

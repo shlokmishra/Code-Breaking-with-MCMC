@@ -4,7 +4,7 @@ library(profvis)
 # profvis({
   source("function.R")
   # Choose a value of n which will be the number of iterations
-  n <- 500
+  n <- 50
   
   
   # Choose the string which you would like to encrypt and then decrypt using metropolis algorithm

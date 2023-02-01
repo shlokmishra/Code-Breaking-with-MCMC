@@ -1,10 +1,17 @@
 library(purrr)
 library(Rcpp)
+library(doParallel)
+library(dplyr)
+library(magrittr)
 sourceCpp("all-possible-proposals.cpp")
 all_possible_proposals <- compute_all_scores()
 all_possible_proposals[1,1:2] <- c(1,1)
 all_possible_proposals_of_proposal <- all_possible_proposals
 # all_possible_proposals_of_proposal[1,1:2] <- c(1,1)
+no_cores <- detectCores() - 2
+cl <- makeCluster(no_cores)
+registerDoParallel(cl)
+result <- c()
 #### FUNCITONS FOR DEALING WITH CIPHERS ###
 
 generate_cipher <- function() sample(letters, replace = FALSE)
@@ -54,15 +61,7 @@ new_sampling_way <- function(given_cipher){
     temp_cipher <- swap_given_indicies(given_cipher,i,j)
     all_possible_proposals[iter, 3] <- get_log_lik_text(decode_text(ciphered_text, temp_cipher))
   }
-  # for( i in 1:25){
-  #   for(j in (i+1):26){
-  #     iter = iter + 1
-  #     all_possible_proposals[iter, 1] <- i 
-  #     all_possible_proposals[iter, 2] <- j 
-  #     temp_cipher <- swap_given_indicies(given_cipher,i,j)
-  #     all_possible_proposals[iter, 3] <- get_log_lik_text(decode_text(ciphered_text, temp_cipher))
-  #   } 
-  # }
+
   all_possible_proposals
   all_scores <- as.numeric(all_possible_proposals[,3])
   prob <- exp(all_scores)/sum(exp(all_scores))
@@ -77,12 +76,22 @@ new_sampling_wayModified <- function(given_cipher){
   all_possible_proposals[1,3] <- get_log_lik_text(decode_text(ciphered_text, given_cipher))
   iter = 1
   
-  for(iter in 1:326){
-    i <- all_possible_proposals[iter, 1]
-    j <- all_possible_proposals[iter, 2]
-    temp_cipher <- swap_given_indicies(given_cipher,i,j)
-    all_possible_proposals[iter, 3] <- get_log_lik_text(decode_text(ciphered_text, temp_cipher))
+  # for(iter in 1:326){
+  #   i <- all_possible_proposals[iter, 1]
+  #   j <- all_possible_proposals[iter, 2]
+  #   temp_cipher <- swap_given_indicies(given_cipher,i,j)
+  #   all_possible_proposals[iter, 3] <- get_log_lik_text(decode_text(ciphered_text, temp_cipher))
+  # }
+  # result <- c()
+  result <- foreach(i=1:25) %:% foreach(j=(i+1):26) %dopar% {
+    get_log_lik_text(decode_text(ciphered_text, given_cipher))
   }
+  # length(result)
+  # unlist(result)
+  all_possible_proposals[2:326,3] <- unlist(result) 
+  # all_possible_proposals
+  
+  
   
   
   # all_scores <- as.numeric(all_possible_proposals[,3])
@@ -95,12 +104,21 @@ new_sampling_wayModified <- function(given_cipher){
   all_possible_proposals_of_proposal[1,3]<- get_log_lik_text(decode_text(ciphered_text, proposed_cipher))
   
   
-  for(iter in 1:326){
-    all_possible_proposals_of_proposal[iter, 1] -> i 
-    all_possible_proposals_of_proposal[iter, 2] -> j
+  # for(iter in 1:326){
+  #   all_possible_proposals_of_proposal[iter, 1] -> i 
+  #   all_possible_proposals_of_proposal[iter, 2] -> j
+  #   temp_cipher <- swap_given_indicies(proposed_cipher,i,j)
+  #   all_possible_proposals_of_proposal[iter, 3] <- get_log_lik_text(decode_text(ciphered_text, temp_cipher))
+  # }
+  # result <- c()
+  result <- foreach(i=1:25) %:% foreach(j=(i+1):26) %dopar% {
     temp_cipher <- swap_given_indicies(proposed_cipher,i,j)
-    all_possible_proposals_of_proposal[iter, 3] <- get_log_lik_text(decode_text(ciphered_text, temp_cipher))
+    get_log_lik_text(decode_text(ciphered_text, temp_cipher))
   }
+  # length(result)
+  # unlist(result)
+  all_possible_proposals_of_proposal[2:326,3] <- unlist(result) 
+  # all_possible_proposals
   # all_scores_new <- as.numeric(all_possible_proposals_of_proposal[,3])
   q1 <- exp(all_possible_proposals_of_proposal[1,3])/sum(exp(all_possible_proposals_of_proposal[,3]))
   q2 <- exp(all_possible_proposals[new_proposal, 3])/ sum(exp(all_possible_proposals[,3]))
@@ -142,6 +160,7 @@ break_into_two_chars <- function(text){
                            to = ending_indices))
 }
 
+### FUNCTIONS DEPLOYING METROPOLIS ALGORITHM TO DERYPT A GIVRN TEXT IN GIVEN N ITERNATIONS ###
 
 decrypt_metrop <- function(ciphered_text, n){
   
@@ -265,7 +284,6 @@ decrypt_metropReg <- function(ciphered_text, n){
   return(list(decoded_text_best, similar))
   # save(war_and_peace_2_characters, file = "war_and_peace_2_characters.Rdata")
 }
-
 decrypt_metropModified <- function(ciphered_text, n){
   
   
@@ -333,6 +351,5 @@ decrypt_metropModified <- function(ciphered_text, n){
   # save(war_and_peace_2_characters, file = "war_and_peace_2_characters.Rdata")
   
 }
-
 
 
