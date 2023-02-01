@@ -4,7 +4,7 @@ library(profvis)
 # profvis({
   source("function.R")
   # Choose a value of n which will be the number of iterations
-  n <- 50
+  n <- 500
   
   
   # Choose the string which you would like to encrypt and then decrypt using metropolis algorithm
@@ -20,7 +20,7 @@ library(profvis)
   
   decoded_text_best <- decrypt_metrop(ciphered_text, n)
   decoded_text_bestReg <- decrypt_metropReg(ciphered_text, 1e4)
-  decoded_text_bestModified <- decrypt_metropModified(ciphered_text, n)
+  system.time(decoded_text_bestModified <- decrypt_metropModified(ciphered_text, 1e2))
   paste("The best decoded text reached in" , n , "iterations is: '")
   decoded_text_best[[1]]
   decoded_text_bestReg[[1]]
