@@ -1,35 +1,35 @@
-library(profvis)
-# install.packages("profvis")
-
-# profvis({
   source("function.R")
+
+  
+  
   # Choose a value of n which will be the number of iterations
-  n <- 500
+  n <- 50
   
   
   # Choose the string which you would like to encrypt and then decrypt using metropolis algorithm
-  plaintext <- "the quick brown fox jumps over the lazy dog there are eight billion people in this world"
+  plainText <- "let us try to decode the encrypted sentence formed which actually seems to be gibberish"
   
   
-  true_cipher <- generate_cipher()
-  ciphered_text <- encode_text(text = plaintext,
-                               cipher = true_cipher)
+  trueCipher <- generateCipher()
+  cipheredText <- encodeText(text = plainText,
+                               cipher = trueCipher)
   
   
   
   
-  decoded_text_best <- decrypt_metrop(ciphered_text, n)
-  decoded_text_bestReg <- decrypt_metropReg(ciphered_text, 1e4)
-  system.time(decoded_text_bestModified <- decrypt_metropModified(ciphered_text, 1e2))
+  decodedBestReg <- decryptMetropReg(cipheredText, n)
+  system.time(decoded_text_bestModified <- decryptMetropModified(cipheredText, 1e2))
+  
+  
   paste("The best decoded text reached in" , n , "iterations is: '")
-  decoded_text_best[[1]]
   decoded_text_bestReg[[1]]
   decoded_text_bestModified[[1]]
-  plot(decoded_text_best[[2]], ylim = range(c(decoded_text_best[[2]], get_log_lik_text(plaintext))),
+  
+  
+  plot(decoded_text_bestReg[[2]], ylim = range(c(decoded_text_best[[2]], get_log_lik_text(plaintext))),
     xlim = c(1, 1e4), type = 'l')
-  lines(decoded_text_bestReg[[2]], col = "blue")
   lines(decoded_text_bestModified[[2]], col = "green")
   abline(h=get_log_lik_text(plaintext), col = "red")
   
   
-# })
+

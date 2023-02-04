@@ -1,14 +1,19 @@
 ### USING WAR AND PEACE TO CALCULATE BI-GRAM FREQUENCIES####
+# LinkingTo: Rcpp
 
-load("war_and_peace_2_characters.Rdata")
-probability_table <- table(war_and_peace_2_characters) / length(war_and_peace_2_characters)
-get_log_lik_text <- function(text){
+# load("war_and_peace_2_characters.Rdata")
+# probability_table <- table(war_and_peace_2_characters) / length(war_and_peace_2_characters)
+# save(war_and_peace_2_characters, probability_table, file = "data.Rdata")
+load("data.Rdata")
+logLik <- function(text){
   text %>%
     break_into_two_chars() %>%
     purrr::map_dbl(get_prob_two_char) %>%
     log() %>%
     sum()
 }
+
+
 get_prob_two_char <- function(two_char){
   prob_from_table <- probability_table[two_char]
   
@@ -27,15 +32,15 @@ break_into_two_chars <- function(text){
 }
 
 
-generate_cipher <- function() sample(letters, replace = FALSE)
-encode_text <- function(text, cipher){
+generateCipher <- function() sample(letters, replace = FALSE)
+encodeText <- function(text, cipher){
   chartr(
     x = text,
     old = paste(letters, collapse = ""),
     new = paste(cipher, collapse = "")
   )
 }
-decode_text <- function(ciphered_text, cipher) {
+decodeText <- function(ciphered_text, cipher) {
   chartr(
     x = ciphered_text,
     old = paste(cipher, collapse = ""),
@@ -44,7 +49,7 @@ decode_text <- function(ciphered_text, cipher) {
 }
 
 
-swap_random <- function(x){
+swapRand <- function(x){
   rand_indices <- sample(1:length(x), size = 2, replace=FALSE)
   element_1 <- x[rand_indices[1]]
   element_2 <- x[rand_indices[2]]
@@ -54,7 +59,7 @@ swap_random <- function(x){
   
   return(x)
 }
-swap_given_indicies <- function(given_cipher, i, j){
+swapGiven <- function(given_cipher, i, j){
   temp_cipher <- given_cipher
   element_1 <- temp_cipher[i]
   element_2 <- temp_cipher[j]
@@ -63,3 +68,9 @@ swap_given_indicies <- function(given_cipher, i, j){
   temp_cipher[j] <- element_1
   return(temp_cipher)
 }
+
+
+war_and_peace_2_charactersTest <- c("ab", "cd", "ef", "gh")
+probability_tableTest <- table(war_and_peace_2_charactersTest) / length(war_and_peace_2_charactersTest)
+save(war_and_peace_2_charactersTest, probability_tableTest, file = "data.Rdata")
+load("data.Rdata")
