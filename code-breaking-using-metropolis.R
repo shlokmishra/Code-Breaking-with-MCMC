@@ -18,18 +18,18 @@
   
   
   decodedBestReg <- decryptMetropReg(cipheredText, n)
-  system.time(decoded_text_bestModified <- decryptMetropModified(cipheredText, 1e2))
+  decodedBestModified <- decryptMetropModified(cipheredText, 1e2)
   
   
   paste("The best decoded text reached in" , n , "iterations is: '")
-  decoded_text_bestReg[[1]]
-  decoded_text_bestModified[[1]]
+  decodedBestReg[[1]]
+  decodedBestModified[[1]]
   
   
-  plot(decoded_text_bestReg[[2]], ylim = range(c(decoded_text_best[[2]], get_log_lik_text(plaintext))),
-    xlim = c(1, 1e4), type = 'l')
-  lines(decoded_text_bestModified[[2]], col = "green")
-  abline(h=get_log_lik_text(plaintext), col = "red")
+  plot(decodedBestReg[[2]], ylim = range(c(decodedBestReg[[2]], logLik(plainText))),
+    xlim = c(1, 1e3), type = 'l')
+  lines(decodedBestModified[[2]], col = "green")
+  abline(h=logLik(plainText), col = "red")
   
   
 
