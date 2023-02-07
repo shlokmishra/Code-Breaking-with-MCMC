@@ -16,7 +16,7 @@ project, we will be using MCMC to estimate the mapping from the encoded
 message to the original message. Markov chains are defined on a state
 space, where the chain is traveling from state to state. In the
 framework of our problem, the states our Markov Chain is traveling
-between are the \(26!\) possible ciphers. We want to the Markov chain to
+between are the $26!$ possible ciphers. We want to the Markov chain to
 travel to the ciphers that are more “likely to be correct” and stay away
 from the ciphers that are “unlikely to be correct”.
 
@@ -25,10 +25,10 @@ from the ciphers that are “unlikely to be correct”.
 The theory behind MCMC algorithms is based on Bayesian statistics and
 can be represented mathematically as follows:
 
-\[\pi(\theta|x) \propto L(x|\theta) \pi(\theta)\]
+$$\[\pi(\theta|x) \propto L(x|\theta) \pi(\theta)\]$$
 
-where \(\pi(\theta|x)\) is the posterior distribution, \(L(x|\theta)\)
-is the likelihood function and \(\pi(\theta)\) is the prior
+where $\(\pi(\theta|x)\)$ is the posterior distribution, $\(L(x|\theta)\)$
+is the likelihood function and $\(\pi(\theta)\)$ is the prior
 distribution.
 
 # Algorithm
@@ -45,9 +45,9 @@ compile the bi-gram frequencies and enumerate a probability table.
 
 ## Metropolis Algorithm
 
-Let \(sim(cipher)\) be a function that returns a score from 0 and 1
+Let $\(sim(cipher)\)$ be a function that returns a score from 0 and 1
 indicating how similar the text that a cipher produces is to English.
-With the \(sim(cipher)\) function defined, the Metropolis algorithm
+With the $\(sim(cipher)\)$ function defined, the Metropolis algorithm
 works like this. First, start with a randomly chosen cipher as the
 initial state. Then repeat the following steps until the code is
 cracked:
@@ -57,20 +57,20 @@ cracked:
     cipher**.
 
   - Compute the quantity
-    \(\frac{sim(proposal cipher)}{sim(current cipher)}\). If the
+    $\(\frac{sim(proposal cipher)}{sim(current cipher)}\)$. If the
     proposal cipher produces text more similar to English than the
-    current cipher, this ratio will always be greater than \(1\). If the
+    current cipher, this ratio will always be greater than $1$. If the
     current cipher produces text more similar to English than the
-    proposal cipher, this ratio will be between \(0\) and \(1\).
+    proposal cipher, this ratio will be between $0$ and \$1$.
 
-  - If the ratio in the previous step is greater than \(1\), set the
+  - If the ratio in the previous step is greater than $1$, set the
     current cipher to the proposed cipher. This is called **accepting
     the proposal**.
 
   - If the ratio is less than 1, accept the proposal with probability
-    equal to \(\frac{sim(proposal cipher)}{sim(current cipher)}\) and
+    equal to $\(\frac{sim(proposal cipher)}{sim(current cipher)}\)$ and
     reject it (i.e., stay at the current cipher) with probability
-    \(1 - \frac{sim(proposal cipher)}{sim(current cipher)}\)
+    $\(1 - \frac{sim(proposal cipher)}{sim(current cipher)}\)$
 
 In other words, if the proposal cipher produces text more similar to
 English than the current cipher, we always accept it; and if the current
@@ -81,7 +81,7 @@ accepted
 
 ## Modifications
 
-There exist \(26 \choose 2\) neighbours of any cipher. Instead of
+There exist $\(26 \choose 2\)$ neighbours of any cipher. Instead of
 proposing a cipher by randomly swapping two letters, we tend to make an
 informed proposal by accepting a cipher with proportional to its
 *English-similarity* score. I have also introduced a *correction factor*
@@ -123,7 +123,7 @@ To run the code, folloow the given steps:
 3.  Simply run the `code-breaking-using-metropolis.R` script in R.
 
 4.  The code can be modified by changing the user defined parameters
-    \(n\) (number of iterations) and \(plainText\) (the text which will
+    $\(n\)$ (number of iterations) and $\(plainText\)$ (the text which will
     be encypted and the decrypted using the algorithm) to solve other
     code-breaking problems by using the MCMC algorithms in the
     `code-breaking-using-metropolis.R` file.
