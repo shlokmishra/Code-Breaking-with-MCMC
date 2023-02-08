@@ -81,7 +81,7 @@ accepted
 
 ## Modifications
 
-There exist $\(26 \choose 2\)$ neighbours of any cipher. Instead of
+There exist $26 \choose 2$ neighbours of any cipher. Instead of
 proposing a cipher by randomly swapping two letters, we tend to make an
 informed proposal by accepting a cipher with proportional to its
 *English-similarity* score. I have also introduced a *correction factor*
@@ -123,7 +123,7 @@ To run the code, folloow the given steps:
 3.  Simply run the `code-breaking-using-metropolis.R` script in R.
 
 4.  The code can be modified by changing the user defined parameters
-    $\(n\)$ (number of iterations) and $\(plainText\)$ (the text which will
+    $n$ (number of iterations) and $plainText$ (the text which will
     be encypted and the decrypted using the algorithm) to solve other
     code-breaking problems by using the MCMC algorithms in the
     `code-breaking-using-metropolis.R` file.
