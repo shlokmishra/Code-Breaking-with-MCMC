@@ -37,7 +37,7 @@ samplingInformed <- function(givenCipher){
     allProposalsProp[iter, 3] <- logLik(decodeText(cipheredText, tempCipher))
   }
   
-  q1 <- exp(allProposalsProp[1,3])/sum(exp(allProposalsProp[,3]))
+  q1 <- exp(allProposalsProp[new_proposal,3])/sum(exp(allProposalsProp[,3]))
   q2 <- exp(allProposal[new_proposal, 3])/ sum(exp(allProposal[,3]))
   
   return(list((propCipher), c(q1, q2)))
@@ -131,7 +131,7 @@ decryptMetropModified <- function(cipheredText, n){
     currLogLik <- logLik(currDecoded)
     
   
-    acceptProb <- min(1,(exp(propLogLik - currLogLik))*q1/q2)
+    acceptProb <- min(1,exp(propLogLik - currLogLik)) #+ log(q1) - log(q2)))
     
     
     accept <- sample(c(TRUE, FALSE),
