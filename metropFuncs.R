@@ -88,7 +88,7 @@ decryptMetropReg <- function(cipheredText, n){
       max_score <- currLogLik
       bestCipher <- currCipher
     }
-    if(iter %% (n/10) == 0){
+    if(iter %% (n/100) == 0){
       x <- iter*100/n
       print(paste(x, "% Completed"))
     }
@@ -151,7 +151,7 @@ decryptMetropModified <- function(cipheredText, n){
       max_score <- currLogLik
       bestCipher <- currCipher
     }
-    if(iter %% (n/10) == 0){
+    if(iter %% (n/100) == 0){
       x <- iter*100/n
       print(paste(x, "% Completed"))
     }
