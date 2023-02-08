@@ -1,5 +1,5 @@
 #################### USING WAR AND PEACE TO CALCULATE BI-GRAM FREQUENCIES ####################
-load("data.Rdata")
+load("data/probTable.Rdata")
 ## data.Rdata in the repository already contains the probability table required to calculate the similarity score
 ## Hence the portion of code executing that part has been commented out 
 

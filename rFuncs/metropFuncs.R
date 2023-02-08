@@ -1,12 +1,13 @@
 ###LOADING REQUIRED LIBRARIES AND SOURCING SOME FUNCTIONS & CPP FILES###
 library(purrr)
 library(Rcpp)
-source("cipherFuncs.R")
-source("scoreFuncs.R")
-sourceCpp("rcppAllProp.cpp")
+source("rFuncs/cipherFuncs.R")
+source("rFuncs/scoreFuncs.R")
+sourceCpp("cppFuncs/rcppAllProp.cpp")
 allProposal <- compute_all_scores()
 allProposal[1,1:2] <- c(1,1)
 allProposalsProp <- allProposal
+startingCipher <- generateCipher()
 
 ### FUNCTION SAMPLING FROM THE NEIGHBOURS OF THE CURRENT CIPHER IN AN INFORMED MANNER###
 samplingInformed <- function(givenCipher){
@@ -31,8 +32,8 @@ samplingInformed <- function(givenCipher){
   
   
   for(iter in 1:326){
-    allProposalsProp[iter, 1] -> i 
-    allProposalsProp[iter, 2] -> j
+    i <- allProposalsProp[iter, 1]
+    j <- allProposalsProp[iter, 2] 
     tempCipher <- swapIndicies(propCipher,i,j)
     allProposalsProp[iter, 3] <- logLik(decodeText(cipheredText, tempCipher))
   }
@@ -46,7 +47,7 @@ samplingInformed <- function(givenCipher){
 
 ### FUNCTION DEPLOYING METROPOLIS ALGORITHM TO DERYPT A GIVRN TEXT IN GIVEN N ITERNATIONS ###
 decryptMetropReg <- function(cipheredText, n){
-  currCipher <- generateCipher()
+  currCipher <- startingCipher
   i <- 0
   currDecoded <- decodeText(cipheredText,
                                       cipher = currCipher)
@@ -103,7 +104,7 @@ decryptMetropReg <- function(cipheredText, n){
 
 ### FUNCTION DEPLOYING METROPOLIS ALGORITHM WITH MUCH INFORMED PROPOSALS TO DERYPT A GIVRN TEXT IN GIVEN N ITERNATIONS ###
 decryptMetropModified <- function(cipheredText, n){
-  currCipher <- generateCipher()
+  currCipher <- startingCipher
   i <- 0
   currDecoded <- decodeText(cipheredText,
                                       cipher = currCipher)

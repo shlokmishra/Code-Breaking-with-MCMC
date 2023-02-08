@@ -1,4 +1,4 @@
-  source("metropFuncs.R")
+  source("rFuncs/metropFuncs.R")
 
   
   
@@ -33,7 +33,7 @@
   lines(decodedBestModified[[2]], col = "green")
   abline(h=logLik(plainText), col = "red")
   
-# save(decodedBestModified, decodedBestReg, file = "data50kIter.Rdata")  
+# save(decodedBestModified, decodedBestReg, n, plainText, file = "data50kIter.Rdata")
   
 
 
