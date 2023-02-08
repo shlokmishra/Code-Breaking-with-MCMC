@@ -1,9 +1,8 @@
 ###LOADING REQUIRED LIBRARIES AND SOURCING SOME FUNCTIONS & CPP FILES###
 library(purrr)
 library(Rcpp)
-# library(dplyr)
-# library(magrittr)
 source("cipherFuncs.R")
+source("scoreFuncs.R")
 sourceCpp("rcppAllProp.cpp")
 allProposal <- compute_all_scores()
 allProposal[1,1:2] <- c(1,1)
@@ -18,14 +17,14 @@ samplingInformed <- function(givenCipher){
   for(iter in 1:326){
     i <- allProposal[iter, 1]
     j <- allProposal[iter, 2]
-    tempCipher <- swapGiven(givenCipher,i,j)
+    tempCipher <- swapIndicies(givenCipher,i,j)
     allProposal[iter, 3] <- logLik(decodeText(cipheredText, tempCipher))
   }
   
   prob <- exp(allProposal[-1,3])/sum(exp(allProposal[-1,3]))
   new_proposal <- sample(2:326, size = 1, prob, replace = TRUE)
   indicies_to_swap <- allProposal[new_proposal, 1:2]
-  propCipher <- swapGiven(givenCipher, indicies_to_swap[1], indicies_to_swap[2])
+  propCipher <- swapIndicies(givenCipher, indicies_to_swap[1], indicies_to_swap[2])
   
   
   allProposalsProp[1,3]<- logLik(decodeText(cipheredText, propCipher))
@@ -34,7 +33,7 @@ samplingInformed <- function(givenCipher){
   for(iter in 1:326){
     allProposalsProp[iter, 1] -> i 
     allProposalsProp[iter, 2] -> j
-    tempCipher <- swapGiven(propCipher,i,j)
+    tempCipher <- swapIndicies(propCipher,i,j)
     allProposalsProp[iter, 3] <- logLik(decodeText(cipheredText, tempCipher))
   }
   
@@ -45,7 +44,7 @@ samplingInformed <- function(givenCipher){
 }
 
 
-### FUNCTIONS DEPLOYING METROPOLIS ALGORITHM TO DERYPT A GIVRN TEXT IN GIVEN N ITERNATIONS ###
+### FUNCTION DEPLOYING METROPOLIS ALGORITHM TO DERYPT A GIVRN TEXT IN GIVEN N ITERNATIONS ###
 decryptMetropReg <- function(cipheredText, n){
   currCipher <- generateCipher()
   i <- 0
@@ -99,11 +98,10 @@ decryptMetropReg <- function(cipheredText, n){
   bestDecoded <- decodeText(cipheredText,
                                    cipher = bestCipher)
   
-  # print(i/n)
-  
   return(list(bestDecoded, similar))
 }
 
+### FUNCTION DEPLOYING METROPOLIS ALGORITHM WITH MUCH INFORMED PROPOSALS TO DERYPT A GIVRN TEXT IN GIVEN N ITERNATIONS ###
 decryptMetropModified <- function(cipheredText, n){
   currCipher <- generateCipher()
   i <- 0
@@ -121,8 +119,8 @@ decryptMetropModified <- function(cipheredText, n){
     foo <- samplingInformed(currCipher)
     propCipher <- foo[[1]]
 
-    (q1 <- foo[[2]][1])
-    (q2 <- foo[[2]][2])
+    q1 <- foo[[2]][1]
+    q2 <- foo[[2]][2]
 
     propDecoded <- decodeText(cipheredText,
                                          cipher = propCipher)
@@ -161,8 +159,6 @@ decryptMetropModified <- function(cipheredText, n){
   }
   bestDecoded <- decodeText(cipheredText,
                                    cipher = bestCipher)
-  
-  # print(i/n)
   
   return(list(bestDecoded, similar, i/n))
 
