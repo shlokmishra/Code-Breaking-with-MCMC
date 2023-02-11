@@ -26,12 +26,13 @@ samplingInformedTest <- function(givenCipher){
   
   allProposalsProp[1,3]<- logLik(decodeText(cipheredText, propCipher))
   
-  
+  pi_x <- allProposalsProp[1,3]
   for(iter in 1:326){
     i <- allProposalsProp[iter, 1]
     j <- allProposalsProp[iter, 2] 
     tempCipher <- swapIndicies(propCipher,i,j)
-    allProposalsProp[iter, 3] <- logLik(decodeText(cipheredText, tempCipher))
+    pi_y <-  logLik(decodeText(cipheredText, tempCipher))
+    allProposalsProp[iter, 3] <- (g(pi_y/pi_x)) #logLik(decodeText(cipheredText, tempCipher))
   }
   
   q1 <- exp(allProposalsProp[new_proposal,3])/sum(exp(allProposalsProp[,3]))
