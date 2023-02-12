@@ -3,11 +3,11 @@
   
   
   # Choose a value of n which will be the number of iterations
-  n <- 50
+  n <- 50000
   
   
   # Choose the string which you would like to encrypt and then decrypt using metropolis algorithm
-  plainText <- "prince wished to" # obtain this post for his son but others were trying through dowager"
+  plainText <- "prince wished to obtain this post for his son but others were trying through dowager"
   
   
   # Generation of a random cipher to encrypt the given text 
@@ -34,7 +34,7 @@
   lines(decodedBestModifiedTest[[2]], col = "green")
   abline(h=logLik(plainText), col = "red")
   
-# save(decodedBestModified, decodedBestReg, n, plainText, file = "data50kIter.Rdata")
-  
+# save(decodedBestModifiedTest, decodedBestReg, n, plainText, file = "data50kIter.Rdata")
+    
 
 
