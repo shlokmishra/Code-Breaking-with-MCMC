@@ -17,19 +17,18 @@ message to the original message. Markov chains are defined on a state
 space, where the chain is traveling from state to state. In the
 framework of our problem, the states our Markov Chain is traveling
 between are the $26!$ possible ciphers. We want to the Markov chain to
-travel to the ciphers that are more “likely to be correct” and stay away
-from the ciphers that are “unlikely to be correct”.
+travel to the ciphers that are more "likely to be correct" and stay away
+from the ciphers that are "unlikely to be correct".
 
 # Theoritical Background
 
 The theory behind MCMC algorithms is based on Bayesian statistics and
 can be represented mathematically as follows:
 
-$$\[\pi(\theta|x) \propto L(x|\theta) \pi(\theta)\]$$
+$$\pi(\theta|x) \propto L(x|\theta) \pi(\theta)$$
 
-where $\(\pi(\theta|x)\)$ is the posterior distribution, $\(L(x|\theta)\)$
-is the likelihood function and $\(\pi(\theta)\)$ is the prior
-distribution.
+where $\pi(\theta|x)$ is the posterior distribution, $L(x|\theta)$ is
+the likelihood function and $\pi(\theta)$ is the prior distribution.
 
 # Algorithm
 
@@ -45,32 +44,31 @@ compile the bi-gram frequencies and enumerate a probability table.
 
 ## Metropolis Algorithm
 
-Let $\(sim(cipher)\)$ be a function that returns a score from 0 and 1
+Let $sim(cipher)$ be a function that returns a score from 0 and 1
 indicating how similar the text that a cipher produces is to English.
-With the $\(sim(cipher)\)$ function defined, the Metropolis algorithm
-works like this. First, start with a randomly chosen cipher as the
-initial state. Then repeat the following steps until the code is
-cracked:
+With the $sim(cipher)$ function defined, the Metropolis algorithm works
+like this. First, start with a randomly chosen cipher as the initial
+state. Then repeat the following steps until the code is cracked:
 
-  - Choose a new (but closely related) cipher by swapping two letters in
+-   Choose a new (but closely related) cipher by swapping two letters in
     the current cipher at random. This is called the **proposal
     cipher**.
 
-  - Compute the quantity
-    $\(\frac{sim(proposal cipher)}{sim(current cipher)}\)$. If the
-    proposal cipher produces text more similar to English than the
-    current cipher, this ratio will always be greater than $1$. If the
-    current cipher produces text more similar to English than the
-    proposal cipher, this ratio will be between $0$ and \$1$.
+-   Compute the quantity
+    $\frac{sim(proposal cipher)}{sim(current cipher)}$. If the proposal
+    cipher produces text more similar to English than the current
+    cipher, this ratio will always be greater than $1$. If the current
+    cipher produces text more similar to English than the proposal
+    cipher, this ratio will be between $0$ and $1$.
 
-  - If the ratio in the previous step is greater than $1$, set the
+-   If the ratio in the previous step is greater than $1$, set the
     current cipher to the proposed cipher. This is called **accepting
     the proposal**.
 
-  - If the ratio is less than 1, accept the proposal with probability
-    equal to $\(\frac{sim(proposal cipher)}{sim(current cipher)}\)$ and
+-   If the ratio is less than 1, accept the proposal with probability
+    equal to $\frac{sim(proposal cipher)}{sim(current cipher)}$ and
     reject it (i.e., stay at the current cipher) with probability
-    $\(1 - \frac{sim(proposal cipher)}{sim(current cipher)}\)$
+    $1 - \frac{sim(proposal cipher)}{sim(current cipher)}$
 
 In other words, if the proposal cipher produces text more similar to
 English than the current cipher, we always accept it; and if the current
@@ -84,33 +82,38 @@ accepted
 There exist $26 \choose 2$ neighbours of any cipher. Instead of
 proposing a cipher by randomly swapping two letters, we tend to make an
 informed proposal by accepting a cipher with proportional to its
-*English-similarity* score. I have also introduced a *correction factor*
-in calculation of acceptance probability which ensures that the Markov
-Chain converges at the correct point in space.
+*English-similarity* score. The proposal distribution structure taken
+into account was
+$$Q_g,\sigma(x,dy) = \frac{g(\frac{\pi(x)}{\pi(y)}K_\sigma(x,dy)}{Z_g(x)}$$
+where $g(t)$ is a balancing function with its optimal choice
+$g(t) = \frac{t}{1+t}$ being used here, $Z_g(x)$ is a normalizing
+constant and $K_\sigma(x,dy)$ is any symmetric proposal mass function.
+In this way we are able to move to more informed proposals instead of
+making random swaps for the same like in the previously stated
+algorithm.
 
 # Repository Structure
 
 The repository contains the following files:
 
-  - `code-breaking-using-metropolis.R` contains the main implentation of
-    the algorithm which can be used by a user for any number of given
-    iterations and any given piece of text
+-   `rFuncs/code-breaking-using-metropolis.R` contains the main
+    implentation of the algorithm which can be used by a user for any
+    number of given iterations and any given piece of text
 
-  - `metropFuncs.R` contains the implementation of a regular and an
-    informed MCMC algorithm.
+-   `rFuncs` folder contains the implementation of a regular and an
+    informed MCMC algorithm along with all the functions required to
+    deal with ciphers and calculation of the English similarity score.
 
-  - `cipherFuncs.R` contains all the user defined functions to deal with
-    ciphers. For example: Generating a cipher, swapping two indicies,
-    encoding and decoding texts using a given cipher.
+-   `output.R` script can be used to get a fair idea of the
+    implementation of this algorithm by having a look at the final
+    results and visualizations of a sample 50k iteration run.
 
-  - `scoreFuncs.R` contains all the functions required to calculate the
-    *English-similarity* score.
+-   `data` folder contains the probability table of all two character
+    combinations generated from *War and Peace* along with the stored
+    results of a sample run of 50k iterations.
 
-  - `data.Rdata` contains the probability table of all two character
-    combinations generated from *War and Peace*.
-
-  - Various `.cpp` files contain the implementation of various functions
-    and sections of code in *C++* using the "Rcpp" package.
+-   `cppFuncs` folder contain the implementation of various functions
+    and sections of code in *C++* using the \"Rcpp\" package.
 
 # Usage
 
@@ -120,13 +123,18 @@ To run the code, folloow the given steps:
 
 2.  Navigate to the repository folder in your terminal.
 
-3.  Simply run the `code-breaking-using-metropolis.R` script in R.
+3.  Simply run the `rFuncs/code-breaking-using-metropolis.R` script in
+    R.
 
-4.  The code can be modified by changing the user defined parameters
-    $n$ (number of iterations) and $plainText$ (the text which will
-    be encypted and the decrypted using the algorithm) to solve other
+4.  The code can be modified by changing the user defined parameters $n$
+    (number of iterations) and $plainText$ (the text which will be
+    encypted and the decrypted using the algorithm) to solve other
     code-breaking problems by using the MCMC algorithms in the
     `code-breaking-using-metropolis.R` file.
+
+5.  Or else one can simply run `output.R` script to get an idea of how
+    this algorithm works using the data already stored for a sample run
+    of 50k iterations
 
 # Conclusion
 
@@ -137,4 +145,4 @@ These algorithms have the potential to be used in real-world
 applications for code breaking and encryption analysis. The use of Rcpp
 for improved performance is also demonstrated. The code is
 well-documented and easy to use, making it a great resource for anyone
-interested in cryptography or code-breaking. I hope you find it useful\!
+interested in cryptography or code-breaking. I hope you find it useful!

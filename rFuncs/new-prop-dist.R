@@ -5,7 +5,7 @@ g <- function(t){
 }
 
 
-samplingInformedTest <- function(givenCipher){
+samplingInformed <- function(givenCipher){
   
   allProposal[1,3] <- logLik(decodeText(cipheredText, givenCipher))
   iter = 1
@@ -43,7 +43,7 @@ samplingInformedTest <- function(givenCipher){
 
 
 
-decryptMetropModifiedTest <- function(cipheredText, n){
+decryptMetropModified <- function(cipheredText, n){
   currCipher <- startingCipher
   i <- 0
   currDecoded <- decodeText(cipheredText,

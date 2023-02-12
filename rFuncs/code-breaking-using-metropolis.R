@@ -21,20 +21,20 @@
   # the given text in the given number of iterations
   decodedBestReg <- decryptMetropReg(cipheredText, n)
   # decodedBestModified <- decryptMetropModified(cipheredText, n)
-  decodedBestModifiedTest <- decryptMetropModifiedTest(cipheredText, n)
+  decodedBestModified <- decryptMetropModifiedTest(cipheredText, n)
   
   # Printing the decrypted text which has highest similarity score
   paste("The best decoded text reached in" , n , "iterations is: '")
   decodedBestReg[[1]]
-  decodedBestModifiedTest[[1]]
+  decodedBestModified[[1]]
   
   # Visualising the change in similarity score throughout the process
   plot(decodedBestReg[[2]], ylim = range(c(decodedBestReg[[2]], logLik(plainText))),
     xlim = c(1, n), type = 'l')
-  lines(decodedBestModifiedTest[[2]], col = "green")
-  abline(h=logLik(plainText), col = "red")
-  
-# save(decodedBestModifiedTest, decodedBestReg, n, plainText, file = "data50kIter.Rdata")
+  lines(decodedBestModified[[2]], col = "red")
+  abline(h=logLik(plainText), col = "green")
+
+  # save(decodedBestModified, decodedBestReg, n, plainText, file = "data50kIter.Rdata")
     
 
 

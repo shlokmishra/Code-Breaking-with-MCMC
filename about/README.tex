@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \title{Code Breaking with MCMC}
-\author{Shlok Mishra}
+\author{Dootika Vats, Shlok Mishra}
 \date{February 3, 2023}
 
 \begin{document}
@@ -48,19 +48,19 @@ Let $sim(cipher)$ be a function that returns a score from 0 and 1 indicating how
 In other words, if the proposal cipher produces text more similar to English than the current cipher, we always accept it; and if the current cipher produces text more similar to English than the proposal cipher, we accept or reject it with probability given by the ratio of their scores. The worse a proposal performs, the less likely it will be accepted
 
 \subsection{Modifications}
-There exist $26 \choose 2$ neighbours of any cipher. Instead of proposing a cipher by randomly swapping two letters, we tend to make an informed proposal by accepting a cipher with proportional to its \emph{English-similarity} score. I have also introduced a \emph{correction factor} in calculation of acceptance probability which ensures that the Markov Chain converges at the correct point in space.
+There exist $26 \choose 2$ neighbours of any cipher. Instead of proposing a cipher by randomly swapping two letters, we tend to make an informed proposal by accepting a cipher with proportional to its \emph{English-similarity} score. The proposal distribution structure taken into account was $$Q_g,\sigma(x,dy) = \frac{g(\frac{\pi(x)}{\pi(y)}K_\sigma(x,dy)}{Z_g(x)}$$
+where $g(t)$ is a balancing function with its optimal choice $g(t) = \frac{t}{1+t}$ being used here, $Z_g(x)$ is a normalizing constant and $K_\sigma(x,dy)$ is any symmetric proposal mass function. In this way we are able to move to more informed proposals instead of making random swaps for the same like in the previously stated algorithm. 
 
 \section{Repository Structure}
 
 The repository contains the following files:
 
 \begin{itemize}
-    \item \texttt{code-breaking-using-metropolis.R} contains the main implentation of the algorithm which can be used by a user for any number of given iterations and any given piece of text
-    \item \texttt{metropFuncs.R} contains the implementation of a regular and an informed MCMC algorithm.
-    \item \texttt{cipherFuncs.R} contains all the user defined functions to deal with ciphers. For example: Generating a cipher, swapping two indicies, encoding and decoding texts using a given cipher.
-    \item \texttt{scoreFuncs.R} contains all the functions required to calculate the \emph{English-similarity} score.
-    \item \texttt{data.Rdata} contains the probability table of all two character combinations generated from \emph{War and Peace}.
-    \item Various \texttt{.cpp} files contain the implementation of various functions and sections of code in \emph{C++} using the "Rcpp" package.
+    \item \texttt{rFuncs/code-breaking-using-metropolis.R} contains the main implentation of the algorithm which can be used by a user for any number of given iterations and any given piece of text
+    \item \texttt{rFuncs} folder contains the implementation of a regular and an informed MCMC algorithm along with all the functions required to deal with ciphers and calculation of the English similarity score.
+    \item \texttt{output.R} script can be used to get a fair idea of the implementation of this algorithm by having a look at the final results and visualizations of a sample 50k iteration run.
+    \item \texttt{data} folder contains the probability table of all two character combinations generated from \emph{War and Peace} along with the stored results of a sample run of 50k iterations.
+    \item \texttt{cppFuncs} folder contain the implementation of various functions and sections of code in \emph{C++} using the "Rcpp" package.
 \end{itemize}
 
 \section{Usage}
@@ -70,8 +70,9 @@ To run the code, folloow the given steps:
 \begin{enumerate}
     \item Clone the repository to your local machine.
     \item Navigate to the repository folder in your terminal.
-    \item Simply run the  \texttt{code-breaking-using-metropolis.R} script in R.
+    \item Simply run the  \texttt{rFuncs/code-breaking-using-metropolis.R} script in R.
     \item The code can be modified by changing the user defined parameters $n$ (number of iterations) and  $plainText$ (the text which will be encypted and the decrypted using the algorithm) to solve other code-breaking problems by using the MCMC algorithms in the \texttt{code-breaking-using-metropolis.R} file.
+    \item Or else one can simply run \texttt{output.R} script to get an idea of how this algorithm works using the data already stored for a sample run of 50k iterations
     
 \end{enumerate}
 
