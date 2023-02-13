@@ -1,5 +1,5 @@
   source("rFuncs/metropFuncs.R")
-  source("rFuncs/new-prop-dist.R")
+  # source("rFuncs/new-prop-dist.R")
   
   
   # Choose a value of n which will be the number of iterations
