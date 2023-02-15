@@ -84,7 +84,7 @@ proposing a cipher by randomly swapping two letters, we tend to make an
 informed proposal by accepting a cipher with proportional to its
 *English-similarity* score. The proposal distribution structure taken
 into account was
-$$Q_g,\sigma(x,dy) = \frac{g(\frac{\pi(x)}{\pi(y)}K_\sigma(x,dy)}{Z_g(x)}$$
+$$Q_g,\sigma(x,dy) = \frac{g(\frac{\pi(x)}{\pi(y)})K_\sigma(x,dy)}{Z_g(x)}$$
 where $g(t)$ is a balancing function with its optimal choice
 $g(t) = \frac{t}{1+t}$ being used here, $Z_g(x)$ is a normalizing
 constant and $K_\sigma(x,dy)$ is any symmetric proposal mass function.

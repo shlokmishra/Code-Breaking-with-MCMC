@@ -23,7 +23,7 @@ break_into_two_chars <- function(text){
 #### UNCOMMENT THE FOLLOWING LINES TO GENERATE THE PROBABILITY TABLE ####
 # war_and_peace_2_characters <- break_into_two_chars(war_and_peace)
 # probability_table <-
-  # table(war_and_peace_2_characters) / length(war_and_peace_2_characters)
+# table(war_and_peace_2_characters) / length(war_and_peace_2_characters)
 
 
 

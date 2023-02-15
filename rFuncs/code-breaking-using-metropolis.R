@@ -3,7 +3,7 @@
   
   
   # Choose a value of n which will be the number of iterations
-  n <- 50000
+  n <- 100
   
   
   # Choose the string which you would like to encrypt and then decrypt using metropolis algorithm
@@ -21,7 +21,7 @@
   # the given text in the given number of iterations
   decodedBestReg <- decryptMetropReg(cipheredText, n)
   # decodedBestModified <- decryptMetropModified(cipheredText, n)
-  decodedBestModified <- decryptMetropModifiedTest(cipheredText, n)
+  decodedBestModified <- decryptMetropModified(cipheredText, n)
   
   # Printing the decrypted text which has highest similarity score
   paste("The best decoded text reached in" , n , "iterations is: '")

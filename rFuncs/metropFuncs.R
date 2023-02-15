@@ -3,11 +3,15 @@ library(purrr)
 library(Rcpp)
 source("rFuncs/cipherFuncs.R")
 source("rFuncs/scoreFuncs.R")
-sourceCpp("cppFuncs/rcppAllProp.cpp")
+sourceCpp("cppFuncs/allProp.cpp")
 allProposal <- compute_all_scores()
 allProposal[1,1:2] <- c(1,1)
 allProposalsProp <- allProposal
 startingCipher <- generateCipher()
+
+g <- function(t){
+  return(t/(1+t))
+}
 
 ### FUNCTION SAMPLING FROM THE NEIGHBOURS OF THE CURRENT CIPHER IN AN INFORMED MANNER###
 # samplingInformed <- function(givenCipher){
@@ -214,7 +218,7 @@ decryptMetropModified <- function(cipheredText, n){
   similar[1] <- currLogLik
   for (iter in 2:n) {
     
-    foo <- samplingInformedTest(currCipher)
+    foo <- samplingInformed(currCipher)
     propCipher <- foo[[1]]
     
     q1 <- foo[[2]][1]
