@@ -3,7 +3,7 @@
   
   
   # Choose a value of n which will be the number of iterations
-  n <- 100
+  n <- 10000
   
   
   # Choose the string which you would like to encrypt and then decrypt using metropolis algorithm
@@ -31,13 +31,15 @@
   
   # Visualising the change in similarity score throughout the process
   plot(decodedBestReg[[2]], ylim = range(c(decodedBestReg[[2]], logLik(plainText))),
-    xlim = c(1, n), type = 'l')
+    xlim = c(1, n), type = 'l', xlab = "Log-Likelihoods", ylab = "Number of Iterations", main = "Comparing different MH algorithms")
   lines(decodedBestBarker[[2]], col = "red")
   lines(decodedBestLit[[2]], col = "blue")
   
   abline(h=logLik(plainText), col = "green")
   legend("bottomright", legend = c("Reg", "Barker", "Lit"),lty = c(1,1,1) , col = c("black", "red", "blue")) 
-  # save(decodedBestModified, decodedBestReg, n, plainText, file = "data50kIter.Rdata")
+  
+  # Uncomment the next line to save your results
+  # save(decodedBestBarker,decodedBestLit, decodedBestReg, n, plainText, file = "data/10k-Iter.Rdata")
     
 
 
