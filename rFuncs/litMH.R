@@ -1,11 +1,6 @@
-source("rFuncs/metropFuncs.R")
+# source("rFuncs/metropFuncs.R")
 
-g <- function(t){
-  return(t/(1+t))
-}
-
-
-samplingInformed <- function(givenCipher){
+samplingInformedLit <- function(givenCipher){
   
   allProposal[1,3] <- logLik(decodeText(cipheredText, givenCipher))
   iter = 1
@@ -15,7 +10,18 @@ samplingInformed <- function(givenCipher){
     j <- allProposal[iter, 2]
     tempCipher <- swapIndicies(givenCipher,i,j)
     pi_y <-  logLik(decodeText(cipheredText, tempCipher))
-    allProposal[iter, 3] <- (g(pi_y/pi_x))
+    check <- pi_y/pi_x
+    if (check < 0.001){
+      finalWeight <- 0.001
+    }
+    else if(check > 0.999){
+      finalWeight <- 0.999
+    }
+    else{
+      finalWeight <- check
+    }
+    
+    allProposal[iter, 3] <- finalWeight
   }
   
   prob <- exp(allProposal[-1,3])/sum(exp(allProposal[-1,3]))
@@ -32,7 +38,19 @@ samplingInformed <- function(givenCipher){
     j <- allProposalsProp[iter, 2] 
     tempCipher <- swapIndicies(propCipher,i,j)
     pi_y <-  logLik(decodeText(cipheredText, tempCipher))
-    allProposalsProp[iter, 3] <- (g(pi_y/pi_x)) #logLik(decodeText(cipheredText, tempCipher))
+    check <- pi_y/pi_x
+    if (check < 0.001){
+      finalWeight <- 0.001
+    }
+    else if(check > 0.999){
+      finalWeight <- 0.999
+    }
+    else{
+      finalWeight <- check
+    }
+    
+    # allProposal[iter, 3] <- finalWeight
+    allProposalsProp[iter, 3] <- finalWeight #logLik(decodeText(cipheredText, tempCipher))
   }
   
   q1 <- exp(allProposalsProp[new_proposal,3])/sum(exp(allProposalsProp[,3]))
@@ -41,9 +59,7 @@ samplingInformed <- function(givenCipher){
   return(list((propCipher), c(q1, q2)))
 }
 
-
-
-decryptMetropModified <- function(cipheredText, n){
+decryptMetropLit <- function(cipheredText, n){
   currCipher <- startingCipher
   i <- 0
   currDecoded <- decodeText(cipheredText,
@@ -57,7 +73,7 @@ decryptMetropModified <- function(cipheredText, n){
   similar[1] <- currLogLik
   for (iter in 2:n) {
     
-    foo <- samplingInformedTest(currCipher)
+    foo <- samplingInformedLit(currCipher)
     propCipher <- foo[[1]]
     
     q1 <- foo[[2]][1]
