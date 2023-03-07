@@ -1,5 +1,6 @@
-load("data/data-1k-Iter.Rdata")
+load("data/10k-Iter.Rdata")
 source("rFuncs/scoreFuncs.R")
+library(dplyr)
 
 paste("The original text was:")
 plainText
