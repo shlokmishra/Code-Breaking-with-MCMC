@@ -27,7 +27,7 @@ samplingMultiTry <- function(givenCipher, N){
   propDecoded <- decodeText(cipheredText,
                             cipher = propCipher)
   currDecoded <- decodeText(cipheredText,
-                            cipher = currCipher)
+                            cipher = givenCipher)
   
   propLogLik <- logLik(propDecoded)
   currLogLik <- logLik(currDecoded)

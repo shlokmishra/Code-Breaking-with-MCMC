@@ -3,7 +3,8 @@ library(purrr)
 library(Rcpp)
 source("rFuncs/cipherFuncs.R")
 source("rFuncs/scoreFuncs.R")
-source("rFuncs/litMH.R")
+
+
 sourceCpp("cppFuncs/allProp.cpp")
 allProposal <- compute_all_scores()
 allProposal[1,1:2] <- c(1,1)

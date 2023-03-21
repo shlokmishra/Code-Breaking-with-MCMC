@@ -1,9 +1,10 @@
   source("rFuncs/metropFuncs.R")
-  # source("rFuncs/new-prop-dist.R")
-  
+  source("rFuncs/litMH.R")
+  source("rFuncs/multiTryMetrop.R")
+
   
   # Choose a value of n which will be the number of iterations
-  n <- 50
+  n <- 10
   
   
   # Choose the string which you would like to encrypt and then decrypt using metropolis algorithm
