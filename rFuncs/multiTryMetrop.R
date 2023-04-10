@@ -1,5 +1,7 @@
 source("rFuncs/metropFuncs.R")
 N <- 50
+minBound <- 1e-8
+maxBound <- 1 - 1e-8 
 
 samplingMultiTry <- function(givenCipher, N){
   neighbourSubset_1 <- sample(2:326, size = N)
@@ -11,6 +13,19 @@ samplingMultiTry <- function(givenCipher, N){
     j <- allProposal[neighbourSubset_1[k], 2]
     tempCipher <- swapIndicies(givenCipher,i,j)
     score_1[k] <-  logLik(decodeText(cipheredText, tempCipher))
+    for(i in 1:N){
+      check <- score_1[i]
+      if (check < minBound){
+        finalWeight <- minBound
+      }
+      else if(check > maxBound){
+        finalWeight <- maxBound
+      }
+      else{
+        finalWeight <- check
+      }
+      score_1[i] <- finalWeight
+    }
   }
   
   proposal <- sample(neighbourSubset_1, size = 1, prob = exp(score_1)/sum(exp(score_1)))
@@ -23,6 +38,19 @@ samplingMultiTry <- function(givenCipher, N){
     j <- allProposal[neighbourSubset_2[k], 2]
     tempCipher <- swapIndicies(propCipher,i,j)
     score_2[k] <-  logLik(decodeText(cipheredText, tempCipher))
+    for(i in 1:(N-1)){
+      check <- score_2[i]
+      if (check < minBound){
+        finalWeight <- minBound
+      }
+      else if(check > maxBound){
+        finalWeight <- maxBound
+      }
+      else{
+        finalWeight <- check
+      }
+      score_2[i] <- finalWeight
+    }
   }
   propDecoded <- decodeText(cipheredText,
                             cipher = propCipher)

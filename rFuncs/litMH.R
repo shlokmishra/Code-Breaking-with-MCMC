@@ -14,11 +14,11 @@ samplingInformedLit <- function(givenCipher){
     tempCipher <- swapIndicies(givenCipher,i,j)
     pi_y <-  logLik(decodeText(cipheredText, tempCipher))
     check <- pi_y/pi_x
-    if (check < 0.001){
-      finalWeight <- 0.001
+    if (check < minBound){
+      finalWeight <- minBound
     }
-    else if(check > 0.999){
-      finalWeight <- 0.999
+    else if(check > maxBound){
+      finalWeight <- maxBound
     }
     else{
       finalWeight <- check
